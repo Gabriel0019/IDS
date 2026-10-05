@@ -6,7 +6,7 @@ from datetime import datetime
 puertos_ip = defaultdict(set)
 tiempo_inicio = defaultdict(float)
 
-limite_puertos = 10
+limite_puertos = 3
 ventanas_tiempo = 10
 
 def registrar_alerta(ip, cantidad):
@@ -28,6 +28,7 @@ def analizar_paquete(paquete):
     else:
         return
 
+
     ahora = time.time()
 
     if not tiempo_inicio[ip_origen]:
@@ -42,7 +43,7 @@ def analizar_paquete(paquete):
     puertos_ip[ip_origen].add(puerto_destino)
 
     cantidad = len(puertos_ip[ip_origen])
-    print(f"{ip_origen} -> puerto {puerto_destino}" f"| Puertos distintos: {cantidad}")
+    print(f"{ip_origen} -> puerto {puerto_destino} | Puertos distintos: {cantidad}")
 
     if cantidad >= limite_puertos:
         print(f"Alerta: Posible escaneo de puertos desde {ip_origen} (puertos distintos: {cantidad})")
@@ -50,12 +51,8 @@ def analizar_paquete(paquete):
         puertos_ip[ip_origen].clear()
         tiempo_inicio[ip_origen] = ahora
 
-    puertos_ip[ip_origen].clear()
-
-    tiempo_inicio[ip_origen] = ahora
-
 
 print("IDS iniciado...")
 print("Analizando paquetes...")
 
-sniff(prn=analizar_paquete, filter="ip", store=0)
+sniff(prn=analizar_paquete, filter="tcp", store=0)
