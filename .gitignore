@@ -1,1 +1,12 @@
+venv/
+.venv/
+
+__pycache__/
+*.pyc
+
 alertas.log
+
+.env
+
+.DS_Store
+Thumbs.db
